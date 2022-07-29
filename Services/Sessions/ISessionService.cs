@@ -9,5 +9,11 @@ namespace Timely_v1.Services.Sessions
         SessionViewModel StartSession();
         SessionViewModel EndSession(string projectName);
         List<SessionViewModel> GetAllSessions();
+        //Anex
+        //TODO
+        SessionViewModel GetLastProject(string projectName);
+        //Anex2
+        //TODO
+        //SessionViewModel GetTotalProjectTime(string projectName);
     }
 }

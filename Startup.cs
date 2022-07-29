@@ -12,10 +12,9 @@ namespace Timely_v1
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) 
+            => Configuration = configuration;
+        
 
         public IConfiguration Configuration { get; }
 
@@ -24,7 +23,8 @@ namespace Timely_v1
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>
+                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<ISessionRepository, SessionRepository>();
         }
@@ -43,11 +43,12 @@ namespace Timely_v1
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -10,5 +10,6 @@ namespace Timely_v1.Repository.Sessions
         Task<Session> Create();
         Task<Session> UpdateActiveSession(string projectName);
         List<Session> GetAllSessions();
+        //Task<List<Session>> GetSessionsSameName(string projectName);
     }
 }

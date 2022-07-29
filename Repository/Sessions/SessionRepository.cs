@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Timely_v1.DatabaseContext;
 using Timely_v1.Models;
@@ -10,13 +11,17 @@ namespace Timely_v1.Repository.Sessions
     public class SessionRepository : ISessionRepository
     {
         private readonly AppDbContext _dbContext;
-        public SessionRepository(AppDbContext dbContext) 
+        public SessionRepository(AppDbContext dbContext)
             => _dbContext = dbContext;
 
-        public Task<Session> GetActiveSession() 
+        public SessionRepository()
+        {
+        }
+
+        public Task<Session> GetActiveSession()
             => _dbContext.Set<Session>().FirstOrDefaultAsync(x => x.EndDate == DateTime.MinValue);
 
-        public List<Session> GetAllSessions() 
+        public List<Session> GetAllSessions()
             => _dbContext.Set<Session>().ToListAsync().Result;
 
         public async Task<Session> Create()
@@ -35,12 +40,21 @@ namespace Timely_v1.Repository.Sessions
 
         public async Task<Session> UpdateActiveSession(string projectName)
         {
-            var updatingSession = _dbContext.Set<Session>().FirstOrDefaultAsync(x => x.EndDate == DateTime.MinValue).Result;
+            var updatingSession = await _dbContext.Set<Session>().FirstOrDefaultAsync(x => x.EndDate == DateTime.MinValue);
             updatingSession.EndDate = DateTime.Now;
             updatingSession.ProjectName = projectName;
             await _dbContext.SaveChangesAsync();
 
             return updatingSession;
         }
+
+        //public async Task<Session> GetSessionsSameName(string projectName)
+        //{
+        //    var result = _dbContext.Set<Session>()
+        //        .GroupBy(x => x.ProjectName == projectName)        // Group by name
+        //        .Where(g => g.Count() > 1)   // Select only groups having duplicates
+        //        .Where(g => g.EndDate !=  )
+        //        .SelectMany(g => g);         // Ungroup (flatten) the groups
+        //}
     }
 }
